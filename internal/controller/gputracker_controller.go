@@ -79,7 +79,6 @@ func (r *GPUTrackerReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 	// check if node list is the same as the present on CRD
 	if tracker.GPUNodes != commaSeparatedNodes {
 		tracker.GPUNodes = commaSeparatedNodes
-		tracker.Status.LastUpdateTime = time.Now().Format(time.RFC3339)
 
 		if err := r.Update(ctx, tracker); err != nil {
 			log.Log.Error(err, "Failed to update GPUTracker node list")

@@ -23,13 +23,6 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-// GPUTrackerStatus defines the observed state of GPUTracker
-type GPUTrackerStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-	LastUpdateTime string `json:"lastUpdateTime,omitempty"`
-}
-
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 //+kubebuilder:resource:scope=Cluster
@@ -39,8 +32,7 @@ type GPUTracker struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	GPUNodes string           `json:"gpu_nodes,omitempty"`
-	Status   GPUTrackerStatus `json:"status,omitempty"`
+	GPUNodes string `json:"gpu_nodes,omitempty"`
 }
 
 //+kubebuilder:object:root=true

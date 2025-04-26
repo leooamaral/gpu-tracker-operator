@@ -8,4 +8,4 @@ metadata:
     app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/created-by: gpu-tracker-operator
   name: gputracker-sample
-gpu_nodes: []
+gpu_nodes: ""
