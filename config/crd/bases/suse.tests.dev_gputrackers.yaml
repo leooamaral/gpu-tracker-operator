@@ -12,8 +12,6 @@ spec:
     listKind: GPUTrackerList
     plural: gputrackers
     singular: gputracker
-    shortNames:
-    - gputkr
   scope: Cluster
   versions:
   - name: v1
@@ -27,9 +25,7 @@ spec:
               internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
             type: string
           gpu_nodes:
-            items:
-              type: string
-            type: array
+            type: string
           kind:
             description: 'Kind is a string value representing the REST resource this
               object represents. Servers may infer this from the endpoint the client

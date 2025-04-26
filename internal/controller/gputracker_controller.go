@@ -19,6 +19,7 @@ package controller
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	corev1 "k8s.io/api/core/v1"
@@ -73,9 +74,11 @@ func (r *GPUTrackerReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 		nodeNames = append(nodeNames, node.Name)
 	}
 
+	commaSeparatedNodes := strings.Join(nodeNames, ",")
+
 	// check if node list is the same as the present on CRD
-	if !checkTrackerList(nodeNames, tracker.GPUNodes) {
-		tracker.GPUNodes = nodeNames
+	if tracker.GPUNodes != commaSeparatedNodes {
+		tracker.GPUNodes = commaSeparatedNodes
 		tracker.Status.LastUpdateTime = time.Now().Format(time.RFC3339)
 
 		if err := r.Update(ctx, tracker); err != nil {

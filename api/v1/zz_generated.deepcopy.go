@@ -29,11 +29,6 @@ func (in *GPUTracker) DeepCopyInto(out *GPUTracker) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
 	in.ObjectMeta.DeepCopyInto(&out.ObjectMeta)
-	if in.GPUNodes != nil {
-		in, out := &in.GPUNodes, &out.GPUNodes
-		*out = make([]string, len(*in))
-		copy(*out, *in)
-	}
 	out.Status = in.Status
 }
 
