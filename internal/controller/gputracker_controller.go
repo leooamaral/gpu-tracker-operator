@@ -65,7 +65,7 @@ func (r *GPUTrackerReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 
 	// Check nodes and its labels - node-type: gpu-node
 	nodeList := &corev1.NodeList{}
-	if err := r.List(ctx, nodeList, client.MatchingLabels{"minikube.k8s.io/name": "minikube"}); err != nil {
+	if err := r.List(ctx, nodeList, client.MatchingLabels{"node-type": "gpu-node"}); err != nil {
 		return ctrl.Result{}, err
 	}
 

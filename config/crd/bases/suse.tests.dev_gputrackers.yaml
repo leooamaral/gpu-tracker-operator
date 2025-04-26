@@ -33,8 +33,8 @@ spec:
             type: string
           metadata:
             type: object
+        required:
+        - gpu_nodes
         type: object
     served: true
     storage: true
-    subresources:
-      status: {}
