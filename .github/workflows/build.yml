@@ -22,7 +22,6 @@ jobs:
       matrix:
         architecture:
           - amd64
-          - arm64
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -58,30 +57,3 @@ jobs:
           build-args: |
             TARGETOS=linux
             TARGETARCH=${{ matrix.architecture }}
-
-    #   - name: Generate Artifact Attestation
-    #     uses: actions/attest-build-provenance@v2
-    #     with:
-    #       subject-name: ${{ env.REGISTRY }}/${{ env.REGISTRY_IMAGE }}
-    #       subject-digest: ${{ steps.push.outputs.digest }}
-    #       push-to-registry: true
-
-    #   - name: Export digest
-    #     run: |
-    #       mkdir -p ${{ runner.temp }}/digests
-    #       digest="${{ steps.push.outputs.digest }}"
-    #       touch "${{ runner.temp }}/digests/${digest#sha256:}"
-    #   - name: Upload digest
-    #     uses: actions/upload-artifact@v4
-    #     with:
-    #       name: digests-linux-${{ matrix.architecture }}
-    #       path: ${{ runner.temp }}/digests/*
-    #       if-no-files-found: error
-    #       retention-days: 1
-
-    #   - name: Build and Push Image to GHCR [amd64]
-    #     run: |
-    #       docker build -t ghcr.io/leooamaral/gpunode-tracker:0.1.0 \
-    #        --build-arg TARGETOS=linux --build-arg TARGETARCH=amd64 .
-
-    #       docker push ghcr.io/leooamaral/gpunode-tracker:0.1.0
