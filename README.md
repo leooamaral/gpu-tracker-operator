@@ -8,7 +8,7 @@
 
 1. Add Helm Chart Repository
 ```
-helm repo add  https://
+helm repo add gputracker-charts https://leooamaral.github.io/gpu-tracker-operator
 ```
 
 2. Update information of available charts locally from chart repositories 
@@ -18,16 +18,15 @@ helm repo update
 
 3. Check charts available in the repository
 ```
-helm search repo 
+helm search repo gputracker-charts
 ```
 
 4. Install a chart 
 ```
-helm install <app-name> charts/<chart-name> -f <values-path-file> -n <app-namespace>
+helm install <app-name> gputracker-charts/<chart-name> -f <values-path-file> -n <app-namespace> --wait
 ```
 
 5. Upgrade a chart checking if a release by this name doesn't already exist, so it will run an install
 ```
-helm upgrade -i <app-name> -charts/<chart-name> -f <values-path-file> -n <app-namespace>
+helm upgrade -i <app-name> gputracker-charts/<chart-name> -f <values-path-file> -n <app-namespace> --wait
 ```
-
