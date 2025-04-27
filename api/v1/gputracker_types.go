@@ -26,7 +26,6 @@ import (
 //+kubebuilder:object:root=true
 //+kubebuilder:resource:scope=Cluster
 
-// GPUTracker is the Schema for the gputrackers API
 type GPUTracker struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -34,14 +33,12 @@ type GPUTracker struct {
 	GPUNodes string `json:"gpu_nodes,omitempty"`
 }
 
-//+kubebuilder:object:root=true
+// +kubebuilder:object:root=true
 
-// GPUTrackerList contains a list of GPUTracker
 type GPUTrackerList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []GPUTracker `json:"items"`
-	// not ready status
 }
 
 func init() {
