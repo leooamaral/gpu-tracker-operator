@@ -31,17 +31,64 @@ gpu_nodes: ""
 
 ### Automated
 
-helm repo add gputracker https://leooamaral.github.io/gpu-tracker-operator
+- Docker image is already deployed to GHCR (GitHub Registry) and helm package is already deployed to GH Pages (GitHub Pages).
 
+#### Instructions
+
+1. Add Helm Chart Repository
+```
+helm repo add gputracker-charts https://leooamaral.github.io/gpu-tracker-operator
+```
+
+2. Update information of available charts locally from chart repositories 
+```
 helm repo update
+```
 
-helm repo list
+3. Check charts available in the repository
+```
+helm search repo gputracker-charts
+```
 
-helm search repo gputracker
+4. Install a chart 
+```
+helm install <operator-system-name> gputracker-charts/gpu-tracker-operator -f <values-path-file> -n <operator-system-namespace> \
+    --set image.repository=ghcr.io/leooamaral/gpu-tracker-operator:feat-operator \
+    --set image.tag=latest \
+    --wait
+```
 
-helm upgrade
+5. Verify deployment
+```
+kubectl get pods -n <operator-system-namespace>
+```
+And you should see a Pod like:
+```
+gpu-tracker-controller-59dc7484ff-k6qlf   1/1     Running
+```
 
-helm install or upgrade
+6. Apply a GPUTracker CR
+```
+apiVersion: suse.tests.dev/v1
+kind: GPUTracker
+metadata:
+  name: suse-gpu-tracker
+gpu_nodes: ""
+```
+```
+kubectl apply -f config/samples/suse.tests.dev_v1_gputracker.yaml
+```
+
+7. Verify GPUTracker CR
+```
+kubectl get gputrackers
+```
+And you should see a Pod like:
+```
+suse-gpu-tracker
+```
+
+8. 
 
 ### Manually
 
