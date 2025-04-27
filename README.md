@@ -31,12 +31,28 @@ gpu_nodes: ""
 
 ### Automated
 
+helm repo add gputracker https://leooamaral.github.io/gpu-tracker-operator
+
+helm repo update
+
+helm repo list
+
+helm search repo gputracker
+
+helm upgrade
+
+helm install or upgrade
+
+### Manually
+
 
 
 docker build -t ghcr.io/leooamaral/node-tracker:latest .
 docker push  ghcr.io/leooamaral/node-tracker:latest
 
 deploy controller??
+
+
 
 deploy crd??
 
