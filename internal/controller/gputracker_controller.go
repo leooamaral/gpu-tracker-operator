@@ -31,7 +31,6 @@ import (
 	gpunodev1 "github.com/leooamaral/gpu-tracker-operator/api/v1"
 )
 
-// GPUTrackerReconciler reconciles a GPUTracker object
 type GPUTrackerReconciler struct {
 	client.Client
 	Scheme *runtime.Scheme
@@ -61,9 +60,6 @@ func (r *GPUTrackerReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
-	// Check if GPU Node object exist
-
-	// Check nodes and its labels - node-type: gpu-node
 	nodeList := &corev1.NodeList{}
 	if err := r.List(ctx, nodeList, client.MatchingLabels{"node-type": "gpu-node"}); err != nil {
 		return ctrl.Result{}, err
@@ -76,7 +72,6 @@ func (r *GPUTrackerReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 
 	commaSeparatedNodes := strings.Join(nodeNames, ",")
 
-	// check if node list is the same as the present on CRD
 	if tracker.GPUNodes != commaSeparatedNodes {
 		tracker.GPUNodes = commaSeparatedNodes
 
@@ -84,29 +79,11 @@ func (r *GPUTrackerReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 			log.Log.Error(err, "Failed to update GPUTracker node list")
 			return ctrl.Result{}, err
 		}
-		if err := r.Status().Update(ctx, tracker); err != nil {
-			log.Log.Error(err, "Failed to update GPUTracker status")
-			return ctrl.Result{}, err
-		}
 	}
 
-	return ctrl.Result{RequeueAfter: 5 * time.Minute}, nil
+	return ctrl.Result{RequeueAfter: 2 * time.Minute}, nil
 }
 
-func checkTrackerList(nodeListA, nodeListB []string) bool {
-	if len(nodeListA) != len(nodeListB) {
-		return false
-	}
-
-	for e := range nodeListA {
-		if nodeListA[e] != nodeListB[e] {
-			return false
-		}
-	}
-	return true
-}
-
-// SetupWithManager sets up the controller with the Manager.
 func (r *GPUTrackerReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&gpunodev1.GPUTracker{}).

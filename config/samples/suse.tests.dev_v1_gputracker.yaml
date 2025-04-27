@@ -1,11 +1,5 @@
 apiVersion: suse.tests.dev/v1
 kind: GPUTracker
 metadata:
-  labels:
-    app.kubernetes.io/name: gputracker
-    app.kubernetes.io/instance: gputracker-sample
-    app.kubernetes.io/part-of: gpu-tracker-operator
-    app.kubernetes.io/managed-by: kustomize
-    app.kubernetes.io/created-by: gpu-tracker-operator
-  name: gputracker-sample
+  name: suse-gpu-tracker
 gpu_nodes: ""
