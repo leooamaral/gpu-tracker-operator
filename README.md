@@ -1,7 +1,7 @@
-# GPU Node Operator Helm Charts
+# GPU Tracker Operator Helm Charts
 
 ## Overview
-- This branch holds GPU Node Operator helm charts used to deploy the operator on K8s.
+- This branch holds GPU Tracker Operator helm charts used to deploy the operator on K8s.
 - The charts are packaged and delivered by GitHub Actions to GitHub Pages.
 
 ## How to use it
