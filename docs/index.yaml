@@ -3,11 +3,11 @@ entries:
   gpu-tracker-operator:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2025-04-27T15:38:27.812707992-03:00"
+    created: "2025-04-27T19:26:44.904510065Z"
     description: Helm chart for deploying GPU Tracker Operator
-    digest: 53775d22d1499f564782a9a7913ad4d0509943414fc4432827487661efc32119
+    digest: d6e44a86fcd69857c7c8de95c8509cdbe4418a9ce58e7d20ca4316229c761fcc
     name: gpu-tracker-operator
     urls:
     - https://leooamaral.github.io/gpu-tracker-operator/gpu-tracker-operator-0.1.0.tgz
     version: 0.1.0
-generated: "2025-04-27T15:38:27.811874559-03:00"
+generated: "2025-04-27T19:26:44.903834865Z"
