@@ -1,4 +1,5 @@
 apiVersion: v2
-version: 0.0.1
 name: gpu-tracker-operator
-description: Helm chart for GPU Tracker
+description: Helm chart for deploying GPU Tracker Operator
+version: 0.1.0
+appVersion: 0.1.0

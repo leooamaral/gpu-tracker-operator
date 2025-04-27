@@ -1,3 +1,4 @@
+{{- if .Values.deleteCRDOnUninstall }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -19,3 +20,4 @@ spec:
             - |
               echo "Deleting CRD gputrackers.suse.tests.dev"
               kubectl delete crd gputrackers.suse.tests.dev || true
+{{- end }}
