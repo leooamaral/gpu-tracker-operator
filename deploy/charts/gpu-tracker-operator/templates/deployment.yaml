@@ -21,8 +21,6 @@ spec:
     spec:
       serviceAccountName: {{ .Release.Name }}-sa
       terminationGracePeriodSeconds: 20
-      imagePullSecrets:
-        - name: ghcr-secret
       securityContext:
         runAsNonRoot: true
       containers:
