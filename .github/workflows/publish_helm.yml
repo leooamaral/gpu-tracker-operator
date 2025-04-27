@@ -2,10 +2,10 @@ name: Release Helm Charts
 
 on:
    push:
-    #  branches:
-    #    - master
-    #  paths:
-    #    - deploy/charts/**
+     branches:
+       - master
+     paths:
+       - deploy/charts/**
 jobs:
   release:
     permissions:
