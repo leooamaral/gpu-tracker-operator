@@ -18,7 +18,6 @@ package controller
 
 import (
 	"context"
-	"fmt"
 	"strings"
 	"time"
 
@@ -50,18 +49,17 @@ type GPUTrackerReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.16.3/pkg/reconcile
 func (r *GPUTrackerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	// logger := log.FromContext(ctx)
-	// logger.V(consts.LogLevelInfo).Info("Reconciling GPUTracker")
+	logger := log.FromContext(ctx)
+	logger.Info("Starting reconciliation for GPUTracker", "name", req.Name)
 
 	tracker := &gpunodev1.GPUTracker{}
 	if err := r.Get(ctx, req.NamespacedName, tracker); err != nil {
-		err = fmt.Errorf("error getting GPUTracker object: %w", err)
-		// logger.V(consts.LogLevelError).Error(nil, err.Error())
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
 	nodeList := &corev1.NodeList{}
 	if err := r.List(ctx, nodeList, client.MatchingLabels{"node-type": "gpu-node"}); err != nil {
+		logger.Error(err, "Failed to list nodes with label node-type=gpu-node")
 		return ctrl.Result{}, err
 	}
 
@@ -79,9 +77,12 @@ func (r *GPUTrackerReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 			log.Log.Error(err, "Failed to update GPUTracker node list")
 			return ctrl.Result{}, err
 		}
+		logger.Info("Successfully updated GPUTracker with matching nodes", "nodes", commaSeparatedNodes)
+	} else {
+		logger.Info("No changes detected in GPUTracker gpu_nodes, skipping update")
 	}
 
-	return ctrl.Result{RequeueAfter: 2 * time.Minute}, nil
+	return ctrl.Result{RequeueAfter: 1 * time.Minute}, nil
 }
 
 func (r *GPUTrackerReconciler) SetupWithManager(mgr ctrl.Manager) error {

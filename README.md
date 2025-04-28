@@ -4,6 +4,12 @@ Kubernetes Operator automatically discover GPU Nodes and record them in a Custom
 
 ## Summary
 
+- [Overview](#overview)
+- [CRD Example](#crd-example)
+  - [Spec Details](#spec-details)
+- [Installation From Registry](#installation-from-registry)
+- [Installation From GitHub Repository](#installation-from-github-repository)
+- [Uninstall](#uninstall)
 
 
 ## Overview
@@ -11,6 +17,8 @@ Kubernetes Operator automatically discover GPU Nodes and record them in a Custom
 GPU Tracker Operator monitors all Nodes in the Kubernetes cluster and finds Nodes that have a specific label: `node-type: gpu-node`.
 
 It collects all matching Node names, and updates the corresponding custom resource (`GPUTracker`) under `gpu_nodes`.
+
+It is present pipeline for building docker image and publishing to GHCR (GitHub Container Registry), and pipeline for packaging helm charts and publishing to GitHub Pages.
 
 ## CRD Example
 ```
@@ -27,13 +35,9 @@ gpu_nodes: ""
 | :--------: | :----: | :----------------:
 | `gpu_nodes`  | `string` | List of Kubernetes node names that have the label `node-type: gpu-node`
 
-## Build and Deploy
-
-### Automated
+## Installation From Registry
 
 - Docker image is already deployed to GHCR (GitHub Registry) and helm package is already deployed to GH Pages (GitHub Pages).
-
-#### Instructions
 
 1. Add Helm Chart Repository
 ```
@@ -53,7 +57,7 @@ helm search repo gputracker-charts
 4. Install a chart 
 ```
 helm install <operator-system-name> gputracker-charts/gpu-tracker-operator -f <values-path-file> -n <operator-system-namespace> \
-    --set image.repository=ghcr.io/leooamaral/gpu-tracker-operator:feat-operator \
+    --set image.repository=ghcr.io/leooamaral/gpu-tracker-operator \
     --set image.tag=latest \
     --wait
 ```
@@ -88,35 +92,69 @@ And you should see a Pod like:
 suse-gpu-tracker
 ```
 
-8. 
+## Installation From GitHub Repository
 
-### Manually
+- Dockerfile is present in the repository so you can also build the operator locally.
 
+1. Build docker image
+```
+docker build -t <registry-name>/<repository-name>:<tag> .
+```
+Or if you want to build specifying the OS platform
+```
+docker build -t <registry-name>/<repository-name>:<tag> --build-arg TARGETOS=linux TARGETARCH=arm64 .
+```
 
+2. Push docker image
+```
+docker push  <registry-name>/<repository-name>:<tag>
+```
 
-docker build -t ghcr.io/leooamaral/node-tracker:latest .
-docker push  ghcr.io/leooamaral/node-tracker:latest
+3. Install a chart 
+```
+helm install <operator-system-name> ./deploy/charts/gpu-tracker-operator -f <values-path-file> -n <operator-system-namespace> \
+    --set image.repository=<registry-name>/<repository-name> \
+    --set image.tag=<tag> \
+    --wait
+```
 
-deploy controller??
+4. Verify deployment
+```
+kubectl get pods -n <operator-system-namespace>
+```
+And you should see a Pod like:
+```
+gpu-tracker-controller-59dc7484ff-k6qlf   1/1     Running
+```
 
+5. Apply a GPUTracker CR
+```
+apiVersion: suse.tests.dev/v1
+kind: GPUTracker
+metadata:
+  name: suse-gpu-tracker
+gpu_nodes: ""
+```
+```
+kubectl apply -f config/samples/suse.tests.dev_v1_gputracker.yaml
+```
 
+6. Verify GPUTracker CR
+```
+kubectl get gputrackers
+```
+And you should see a Pod like:
+```
+suse-gpu-tracker
+```
 
-deploy crd??
+## Uninstall
 
-missing:
-- helm charts - feito
-- dockerfile - feito
-- remove operator-sdk files related e limpar codigo - TODO
-- how to test the operator in readme.md - em andamento
-- pipeline (ci/cd) - upload to ghcr and github artifacts (versioning) + helm chart - em andamento
-
-
-
-
-improvements:
-- operator status
-- controller logs
-- vuln checks
-- linting
-- code tests for integration and check usage
-- leader election
+1. To uninstall the Operator (but keep the CRD):
+```
+helm uninstall <operator-system-name> -n <operator-system-namespace>
+```
+- ATTENTION: Helm does not delete CRDs automatically to protect your data. If you want to manually delete the CRD, run:
+```
+kubectl delete crd gputrackers.suse.tests.dev
+```
