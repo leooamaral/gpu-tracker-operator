@@ -2,10 +2,10 @@ name: Build and Publish Docker Image
 
 on:
    push:
-    #  branches:
-    #    - master
-    #  paths-ignore:
-    #    - deploy/charts/**
+     branches:
+       - master
+     paths-ignore:
+       - deploy/charts/**
 env:
     REGISTRY: ghcr.io
     REGISTRY_IMAGE: ${{ github.repository_owner }}/gpu-tracker-operator
