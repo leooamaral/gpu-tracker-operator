@@ -1,0 +1,62 @@
+name: Build and Publish Docker Image
+
+on:
+   push:
+     branches:
+       - master
+     paths-ignore:
+       - deploy/charts/**
+env:
+    REGISTRY: ghcr.io
+    REGISTRY_IMAGE: ${{ github.repository_owner }}/gpu-tracker-operator
+jobs:
+  build:
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        architecture:
+          - amd64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Docker Metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.REGISTRY_IMAGE }}
+          tags: |
+            type=raw,value=0.1.0
+            type=raw,value=latest
+
+      - name: Build Docker Container
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/${{ matrix.architecture }}
+          labels: ${{ steps.meta.outputs.labels}}
+          tags: ${{ steps.meta.outputs.tags }}
+          push: true
+          build-args: |
+            TARGETOS=linux
+            TARGETARCH=${{ matrix.architecture }}

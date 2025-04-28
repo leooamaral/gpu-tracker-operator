@@ -1,0 +1,4 @@
+## Append samples of your project ##
+resources:
+- suse.tests.dev_v1_gputracker.yaml
+#+kubebuilder:scaffold:manifestskustomizesamples

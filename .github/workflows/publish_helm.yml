@@ -1,0 +1,35 @@
+name: Release Helm Charts
+
+on:
+   push:
+     branches:
+       - master
+     paths:
+       - deploy/charts/**
+jobs:
+  release:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+ 
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Package and Publish
+        run: |
+          helm package deploy/charts/gpu-tracker-operator --destination ./charts
+          git checkout gh-pages
+          mv charts/*.tgz docs
+          helm repo index docs --url https://leooamaral.github.io/gpu-tracker-operator
+          git add docs/
+          git commit -m "Update Helm chart"
+          git push origin gh-pages
+          echo "✅ Published charts"
+ 
