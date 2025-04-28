@@ -38,6 +38,7 @@ gpu_nodes: ""
 ## Installation From Registry
 
 - Docker image is already deployed to GHCR (GitHub Registry) and helm package is already deployed to GH Pages (GitHub Pages).
+- Available O.S. platforms: linux/amd64.
 
 1. Add Helm Chart Repository
 ```
